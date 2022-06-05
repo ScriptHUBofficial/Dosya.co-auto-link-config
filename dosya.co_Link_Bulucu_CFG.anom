@@ -1,0 +1,96 @@
+[SETTINGS]
+{
+  "Name": "dosya.co Link Bulucu CFG",
+  "SuggestedBots": 1,
+  "MaxCPM": 0,
+  "LastModified": "2022-06-04T13:39:24.6642219+03:00",
+  "AdditionalInfo": "",
+  "Author": "CRACKTURKEY",
+  "Version": "1.4.4 [Anomaly]",
+  "IgnoreResponseErrors": false,
+  "MaxRedirects": 8,
+  "NeedsProxies": false,
+  "OnlySocks": false,
+  "OnlySsl": false,
+  "MaxProxyUses": 0,
+  "BanProxyAfterGoodStatus": false,
+  "EncodeData": false,
+  "AllowedWordlist1": "",
+  "AllowedWordlist2": "",
+  "DataRules": [],
+  "CustomInputs": [],
+  "CaptchaUrl": "",
+  "Base64": "",
+  "Grayscale": false,
+  "RemoveLines": false,
+  "RemoveNoise": false,
+  "Dilate": false,
+  "Threshold": 1.0,
+  "DiffKeep": 0.0,
+  "DiffHide": 0.0,
+  "Saturate": false,
+  "Saturation": 0.0,
+  "Transparent": false,
+  "Contour": false,
+  "OnlyShow": false,
+  "ContrastGamma": false,
+  "Contrast": 1.0,
+  "Gamma": 1.0,
+  "Brightness": 1.0,
+  "RemoveLinesMin": 0,
+  "RemoveLinesMax": 0,
+  "Crop": false,
+  "ForceHeadless": false,
+  "AlwaysOpen": false,
+  "AlwaysQuit": false,
+  "DisableNotifications": false,
+  "CustomUserAgent": "",
+  "RandomUA": false,
+  "CustomCMDArgs": ""
+}
+
+[SCRIPT]
+FUNCTION RandomString "?l?l?d?d?l?l?d?l?l?l?d?l" -> CAP "link" 
+
+REQUEST GET "https://dosya.co/<link>" 
+  
+  HEADER "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9" 
+  HEADER "Accept-Encoding: gzip, deflate, br" 
+  HEADER "Accept-Language: tr-TR,tr;q=0.9,en-US;q=0.8,en;q=0.7" 
+  HEADER "Cache-Control: max-age=0" 
+  HEADER "Connection: keep-alive" 
+  HEADER "Host: dosya.co" 
+  HEADER "sec-ch-ua: \" Not A;Brand\";v=\"99\", \"Chromium\";v=\"102\", \"Google Chrome\";v=\"102\"" 
+  HEADER "sec-ch-ua-mobile: ?0" 
+  HEADER "sec-ch-ua-platform: \"Windows\"" 
+  HEADER "Sec-Fetch-Dest: document" 
+  HEADER "Sec-Fetch-Mode: navigate" 
+  HEADER "Sec-Fetch-Site: none" 
+  HEADER "Sec-Fetch-User: ?1" 
+  HEADER "Upgrade-Insecure-Requests: 1" 
+  HEADER "User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.5005.63 Safari/537.36" 
+
+KEYCHECK 
+  KEYCHAIN Retry OR 
+    KEY "Üzgünüm... Ulaşmaya Çalıştığınız Dosya Artık Bu Sitede Bulunmuyor... :(" 
+    KEY "Dosya birçok sebepten dolayı silinmiş olabilir.." 
+    KEY "Bunların başlıca sebepleri şunlar olabilir: " 
+    KEY "Dosya uzun bir süre hiç indirilmediği için silinmiş olabilir, " 
+    KEY "Dosya, yükleyen tarafından silinmiş olabilir. " 
+    KEY "Ya da dosya bizim tarafımızdan site kullanım şartlarına uymadığı için silinmiş olabilir... Bunun için üzgün de değiliz! dosya.co sitesi kişilik haklarına, telif haklarına ve kullanım şartlarımızda belirtilen tüm şartlara oldukça saygılı bir sitedir. Ve bu konuda maalesef hiçbir tavizimiz bulunmamaktadır. " 
+  KEYCHAIN Success OR 
+    KEY "Dosya Adı:" 
+    KEY "Dosya Boyutu:" 
+    KEY "Yükleme Tarihi:" 
+    KEY "Dosyayı Şikayet Et!" 
+
+PARSE "<SOURCE>" LR "Dosya Adı:</b></td><td nowrap>" "</td></tr>" CreateEmpty=FALSE -> CAP "Dosya Adı" 
+
+PARSE "<SOURCE>" LR "Dosya Boyutu:</b></td><td>" "<small>" CreateEmpty=FALSE -> CAP "Dosya Boyutu" 
+
+PARSE "<SOURCE>" LR "Yükleme Tarihi:</b></td><td>" "</td></tr>" CreateEmpty=FALSE -> CAP "Yükleme Tarihi" 
+
+FUNCTION Constant "🔥 Royalist Baba 🔥" -> CAP "Config Made By" 
+
+UTILITY File "dosya.co Bulunan Linkler.txt" AppendLines "https://dosya.co/<link> | <Dosya Adı> | <Dosya Boyutu> | <Yükleme Tarihi>" 
+
