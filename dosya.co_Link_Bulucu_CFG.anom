@@ -90,7 +90,7 @@ PARSE "<SOURCE>" LR "Dosya Boyutu:</b></td><td>" "<small>" CreateEmpty=FALSE -> 
 
 PARSE "<SOURCE>" LR "Yükleme Tarihi:</b></td><td>" "</td></tr>" CreateEmpty=FALSE -> CAP "Yükleme Tarihi" 
 
-FUNCTION Constant "🔥 Royalist Baba 🔥" -> CAP "Config Made By" 
+FUNCTION Constant "discord.gg/script" -> CAP "Config Made By" 
 
 UTILITY File "dosya.co Bulunan Linkler.txt" AppendLines "https://dosya.co/<link> | <Dosya Adı> | <Dosya Boyutu> | <Yükleme Tarihi>" 
 
